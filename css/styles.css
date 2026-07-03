@@ -186,7 +186,7 @@ section { position: relative; }
 }
 .stage-poster {
   position: absolute; inset: 0;
-  width: 100%; height: 100%; object-fit: cover;
+  width: 100%; height: 100%; object-fit: contain;
 }
 #reelVideo {
   /* JS sizes this (and the iframe the API swaps in) to cover the stage */

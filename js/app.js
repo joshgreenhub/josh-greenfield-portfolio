@@ -239,13 +239,13 @@
     };
   }
 
-  // size the iframe to cover the stage like object-fit: cover (16:9 overscan)
+  // size the iframe to fit the stage like object-fit: contain (full 16:9 frame, no crop)
   function sizeStageVideo() {
     const iframe = fxStage.querySelector("iframe");
     if (!iframe) return;
     const w = fxStage.clientWidth, h = fxStage.clientHeight;
-    iframe.style.width = Math.ceil(Math.max(w, h * (16 / 9))) + "px";
-    iframe.style.height = Math.ceil(Math.max(h, w * (9 / 16))) + "px";
+    iframe.style.width = Math.ceil(Math.min(w, h * (16 / 9))) + "px";
+    iframe.style.height = Math.ceil(Math.min(h, w * (9 / 16))) + "px";
     iframe.style.position = "absolute";
     iframe.style.top = "50%";
     iframe.style.left = "50%";
