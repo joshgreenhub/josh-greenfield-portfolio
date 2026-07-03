@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Node / tooling
+node_modules/
+*.log
+
+# Vercel
+.vercel
+
+# Local Claude Code settings (machine-specific)
+.claude/settings.local.json

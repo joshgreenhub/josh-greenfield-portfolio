@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Josh Greenfield — Video Editor & Creative Strategist</title>
+<meta name="description" content="Josh Greenfield is a freelance video editor and creative strategist. Commercials, docs, and films that hold attention to the last frame.">
+<link rel="canonical" href="https://joshgreenfield-portfolio.vercel.app/">
+<meta name="theme-color" content="#0B0D0F">
+
+<!-- Favicon -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" sizes="96x96" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Josh Greenfield">
+<meta property="og:title" content="Josh Greenfield — Video Editor & Creative Strategist">
+<meta property="og:description" content="Freelance video editor and creative strategist. Commercials, docs, and films that hold attention to the last frame.">
+<meta property="og:url" content="https://joshgreenfield-portfolio.vercel.app/">
+<meta property="og:image" content="https://joshgreenfield-portfolio.vercel.app/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Josh Greenfield — Video Editor & Creative Strategist">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Josh Greenfield — Video Editor & Creative Strategist">
+<meta name="twitter:description" content="Freelance video editor and creative strategist. Commercials, docs, and films that hold attention to the last frame.">
+<meta name="twitter:image" content="https://joshgreenfield-portfolio.vercel.app/og.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- Render intro overlay -->
+<div id="renderIntro" aria-hidden="true">
+  <div class="render-bar"><div class="render-bar-fill" id="renderFill"></div></div>
+  <div class="render-label mono" id="renderLabel">CONFORMING PORTFOLIO_v3 …</div>
+</div>
+
+<!-- Transport bar -->
+<header id="transport" aria-label="Timeline navigation">
+  <div class="slate mono">JG<span class="slate-sub">PORTFOLIO_v3</span></div>
+  <div class="track" id="track">
+    <div class="track-line"></div>
+    <button class="marker mono" data-target="reel"><span class="tick"></span>REEL</button>
+    <button class="marker mono" data-target="work"><span class="tick"></span>WORK</button>
+    <button class="marker mono" data-target="about"><span class="tick"></span>ABOUT</button>
+    <button class="marker mono" data-target="contact"><span class="tick"></span>CONTACT</button>
+    <div class="playhead" id="playhead" role="slider" tabindex="0"
+         aria-label="Timeline position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="ph-cap"></div>
+    </div>
+  </div>
+  <div class="jkl-hint mono" id="jklHint" title="J: reverse · K: stop · L: play (tap twice for 2×)">
+    <span>J K L</span><button id="jklDismiss" aria-label="Dismiss shortcut hint">×</button>
+  </div>
+  <div class="timecode mono" id="timecode" aria-hidden="true">00:00:00:00</div>
+</header>
+
+<div id="hairline" aria-hidden="true"></div>
+
+<main>
+  <!-- ============ REEL ============ -->
+  <section id="reel" aria-label="Reel">
+    <div class="hero-sticky">
+      <div class="fx-stage" id="fxStage" aria-hidden="true">
+        <img class="stage-poster" src="https://i.ytimg.com/vi/2bYHXmwnUIc/maxresdefault.jpg"
+             onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/2bYHXmwnUIc/hqdefault.jpg'"
+             alt="">
+        <div id="reelVideo"></div>
+      </div>
+      <div class="hero-scrim" id="heroScrim"></div>
+
+      <div class="safe-corner tl" aria-hidden="true"></div>
+      <div class="safe-corner tr" aria-hidden="true"></div>
+      <div class="safe-corner bl" aria-hidden="true"></div>
+      <div class="safe-corner br" aria-hidden="true"></div>
+
+      <div class="hero-inner" id="heroInner">
+        <div class="hero-copy">
+          <p class="eyebrow mono">A001 · PORTFOLIO_2026 · 23.976 FPS</p>
+          <h1 class="hero-title"><span>JOSH</span><span>GREENFIELD</span></h1>
+          <p class="hero-sub">Video editor &amp; creative strategist. I make footage behave —
+          commercials, docs, and films that hold attention to the last frame.</p>
+          <div class="hero-actions">
+            <span class="skim-link mono">SCROLL TO REVEAL THE REEL ↓</span>
+            <a class="skim-link mono" href="#work" id="skimLink">SKIM THE WORK ↓</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="fx-deck" id="fxDeck">
+        <button class="fx-chip mono" id="muteBtn" aria-pressed="false">🔇 UNMUTE</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section id="work" aria-label="Selected work">
+    <div class="section-head">
+      <p class="eyebrow mono">MEDIA POOL · 17 CLIPS</p>
+      <h2>Selected work</h2>
+      <p class="section-note">Click a clip to open it in the viewer.</p>
+    </div>
+    <div class="bin-tabs" role="tablist" aria-label="Media pool bins">
+      <button class="bin-tab mono" id="tabLong" role="tab" aria-selected="true" aria-controls="bin">▸ BIN: LONG-FORM <span class="tab-count">06</span></button>
+      <button class="bin-tab mono" id="tabShort" role="tab" aria-selected="false" aria-controls="binShort">▸ BIN: SHORT-FORM <span class="tab-count">11</span></button>
+    </div>
+    <div class="bin" id="bin" role="tabpanel"><!-- long-form cards injected by app.js --></div>
+    <div class="bin bin-short" id="binShort" role="tabpanel" hidden><!-- short-form cards injected by app.js --></div>
+  </section>
+
+  <!-- ============ ABOUT / color page ============ -->
+  <section id="about" aria-label="About Josh">
+    <div class="section-head">
+      <p class="eyebrow mono">COLOR PAGE · STILL_01</p>
+      <h2>About</h2>
+      <p class="section-note">The headshot arrived ungraded. Fix that — saturation is a good place to start.</p>
+    </div>
+    <div class="about-grid">
+      <div class="still-viewer">
+        <div class="still-bar mono"><span class="still-dot"></span>JOSH_GREENFIELD_STILL_01.dng<span class="still-state" id="stillState">UNGRADED</span></div>
+        <div class="still-frame" id="stillFrame">
+          <img id="stillImg" src="Assets/josh_web.jpg" alt="Portrait of Josh Greenfield">
+          <div class="tint-layer" id="tintWarm"></div>
+          <div class="tint-layer" id="tintTint"></div>
+        </div>
+        <div class="grade-console" role="group" aria-label="Color grading controls">
+          <div class="grade-row">
+            <label class="grade-ctl">
+              <span class="mono g-label">EXPOSURE</span>
+              <input type="range" id="gExposure" min="-100" max="100" step="1" value="0">
+              <span class="mono g-val" id="vExposure">+0.00</span>
+            </label>
+            <label class="grade-ctl">
+              <span class="mono g-label">CONTRAST</span>
+              <input type="range" id="gContrast" min="-100" max="100" step="1" value="0">
+              <span class="mono g-val" id="vContrast">0.00</span>
+            </label>
+            <label class="grade-ctl">
+              <span class="mono g-label">SATURATION</span>
+              <input type="range" id="gSaturation" min="0" max="200" step="1" value="0">
+              <span class="mono g-val" id="vSaturation">0</span>
+            </label>
+            <label class="grade-ctl">
+              <span class="mono g-label">TEMP</span>
+              <input type="range" id="gTemp" min="-100" max="100" step="1" value="0">
+              <span class="mono g-val" id="vTemp">0</span>
+            </label>
+            <label class="grade-ctl">
+              <span class="mono g-label">TINT</span>
+              <input type="range" id="gTint" min="-100" max="100" step="1" value="0">
+              <span class="mono g-val" id="vTint">0</span>
+            </label>
+          </div>
+          <div class="grade-actions">
+            <button class="fx-chip mono" id="autoGrade">AUTO GRADE</button>
+            <button class="fx-chip mono" id="bypassGrade" aria-pressed="false">BYPASS</button>
+            <button class="fx-chip mono" id="resetGrade">RESET</button>
+          </div>
+        </div>
+      </div>
+      <div class="about-copy">
+        <h3>The person in the suite</h3>
+        <p>I've spent six-plus years in the edit — documentary, corporate, and narrative —
+        turning long timelines into stories that hold. My lane is post from end to end:
+        the cut, motion graphics, sound polish, and the workflows that keep
+        multi-stakeholder projects moving without drama.</p>
+        <p>In 2026 I became a <strong>Motion-certified creative strategist</strong>, which moved
+        me upstream of the timeline: now I help clients decide what to make before anyone
+        rolls a frame — concepts, hooks, and platform strategy that give the edit something
+        worth cutting.</p>
+        <p>If your project has a complex message and a distracted audience, that's my
+        favorite kind of problem.</p>
+        <div class="about-tags">
+          <span class="genre-tag mono">DOCUMENTARY</span>
+          <span class="genre-tag mono">CORPORATE</span>
+          <span class="genre-tag mono">NARRATIVE</span>
+          <span class="genre-tag mono">MOTION GFX</span>
+          <span class="genre-tag mono">CREATIVE STRATEGY — MOTION CERTIFIED, 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" aria-label="Contact">
+    <div class="section-head">
+      <p class="eyebrow mono">DELIVER</p>
+      <h2>Export a project with me</h2>
+    </div>
+    <div class="export-panel">
+      <form class="export-settings" id="briefForm" novalidate>
+        <p class="mono queue-title">RENDER SETTINGS</p>
+        <div class="setting field"><label class="mono key" for="fName">NAME</label>
+          <input class="f-input" type="text" id="fName" name="name" autocomplete="name" required placeholder="Your name"></div>
+        <div class="setting field"><label class="mono key" for="fEmail">EMAIL</label>
+          <input class="f-input" type="email" id="fEmail" name="email" autocomplete="email" required placeholder="you@company.com"></div>
+        <div class="setting field"><label class="mono key" for="fPhone">PHONE</label>
+          <input class="f-input" type="tel" id="fPhone" name="phone" autocomplete="tel" placeholder="Optional"></div>
+        <div class="setting field"><label class="mono key" for="fType">FORMAT</label>
+          <select class="f-input" id="fType" name="type">
+            <option>Commercial / brand</option>
+            <option>Documentary</option>
+            <option>Narrative</option>
+            <option>Social / vertical</option>
+            <option>Creative strategy</option>
+            <option>Something else</option>
+          </select></div>
+        <div class="setting field area"><label class="mono key" for="fMsg">NOTES</label>
+          <textarea class="f-input" id="fMsg" name="message" rows="4" placeholder="The footage, the deadline, the dream — a couple of lines is plenty."></textarea></div>
+        <p class="form-status mono" id="formStatus" role="status"></p>
+        <button class="btn-export" type="submit">Start export ▸</button>
+      </form>
+      <div class="render-queue">
+        <p class="mono queue-title">RENDER QUEUE</p>
+        <div class="queue-item mono"><span class="dot amber"></span>your_project_v1.mov<span class="q-status">awaiting brief</span></div>
+        <div class="queue-item mono"><span class="dot teal"></span>brand_film_recut.mov<span class="q-status">slot open — Q3</span></div>
+        <div class="queue-item mono"><span class="dot dim"></span>directors_cut_v9_FINAL_final2.mov<span class="q-status">we've all been there</span></div>
+        <div class="deliver-info">
+          <div class="setting"><span class="mono key">DESTINATION</span><span class="val"><a href="mailto:joshgreenfield.editor@gmail.com">joshgreenfield.editor@gmail.com</a></span></div>
+          <div class="setting"><span class="mono key">AVAILABILITY</span><span class="val">Booking Q3 2026</span></div>
+          <div class="setting"><span class="mono key">ELSEWHERE</span><span class="val links"><a href="#">Vimeo</a><a href="#">Instagram</a><a href="#">LinkedIn</a></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p class="mono edl">001&nbsp;&nbsp;JG&nbsp;&nbsp;V1&nbsp;&nbsp;C&nbsp;&nbsp;00:00:00:00 → 00:01:00:00&nbsp;&nbsp;·&nbsp;&nbsp;CUT ON RESOLVE + PREMIERE&nbsp;&nbsp;·&nbsp;&nbsp;© 2026 JOSH GREENFIELD&nbsp;&nbsp;·&nbsp;&nbsp;TRT <span id="trt">00:01:00:00</span></p>
+</footer>
+
+<!-- Clip viewer overlay -->
+<div id="viewer" hidden role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+  <div class="viewer-backdrop" id="viewerBackdrop"></div>
+  <div class="viewer-panel">
+    <div class="viewer-bar">
+      <span class="mono viewer-slate" id="viewerSlate">CLIP</span>
+      <button class="viewer-close mono" id="viewerClose" aria-label="Close viewer">CLOSE ✕</button>
+    </div>
+    <div class="viewer-video" id="viewerVideo"></div>
+    <div class="viewer-meta">
+      <div class="viewer-heading">
+        <h3 id="viewerTitle"></h3>
+        <p class="viewer-log" id="viewerLog"></p>
+      </div>
+      <div class="viewer-details">
+        <div class="d-row"><span class="d-key">ROLE</span><span class="d-val" id="viewerRole"></span></div>
+        <div class="d-row"><span class="d-key">CLIENT</span><span class="d-val" id="viewerClient"></span></div>
+        <div class="d-row"><span class="d-key">NOTES</span><span class="d-val" id="viewerNotes"></span></div>
+        <a class="d-link mono" id="viewerYt" href="#" target="_blank" rel="noopener">WATCH ON YOUTUBE ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
