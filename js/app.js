@@ -36,7 +36,7 @@
 
   function makeEmbed(ytid, title, autoplay = true) {
     const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube-nocookie.com/embed/${ytid}?rel=0${autoplay ? "&autoplay=1" : ""}`;
+    iframe.src = `https://www.youtube-nocookie.com/embed/${ytid}?rel=0&cc_load_policy=3&cc_lang_pref=xx${autoplay ? "&autoplay=1" : ""}`;
     iframe.title = title;
     iframe.allow = "autoplay; encrypted-media; picture-in-picture";
     iframe.allowFullscreen = true;
@@ -225,6 +225,7 @@
           autoplay: 1, mute: 1, controls: 0, rel: 0,
           loop: 1, playlist: REEL_ID, // playlist = own id → seamless loop
           playsinline: 1, modestbranding: 1, iv_load_policy: 3,
+          cc_load_policy: 3, cc_lang_pref: "xx",
           disablekb: 1, fs: 0
         },
         events: {
@@ -269,13 +270,30 @@
 
   /* --- sound --- */
   const muteBtn = document.getElementById("muteBtn");
+  const MUTE_SVG = '<svg class="mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>';
+  const MUTE_X = '<line x1="23" y1="9" x2="17" y2="15" class="mute-x"/><line x1="17" y1="9" x2="23" y2="15" class="mute-x"/>';
+  const SOUND_WAVES = '<path d="M15.54 8.46a5 5 0 0 1 0 7.07" class="mute-wave"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14" class="mute-wave"/>';
+  function setMuteIcon(muted) {
+    muteBtn.innerHTML = MUTE_SVG + (muted ? MUTE_X : SOUND_WAVES) + '</svg> ' + (muted ? 'UNMUTE' : 'MUTE');
+    muteBtn.setAttribute("aria-pressed", String(!muted));
+  }
   muteBtn.addEventListener("click", () => {
     if (!playerReady) return;
     const muted = player.isMuted();
     if (muted) { player.unMute(); player.setVolume(100); }
     else player.mute();
-    muteBtn.textContent = muted ? "🔊 MUTE" : "🔇 UNMUTE";
-    muteBtn.setAttribute("aria-pressed", String(muted));
+    setMuteIcon(!muted);
+  });
+
+  /* --- right-side click to reveal reel --- */
+  const heroSticky = document.querySelector(".hero-sticky");
+  heroSticky.addEventListener("click", (e) => {
+    // only trigger on the right ~40% of the hero, and only when text overlay is visible
+    const rect = heroSticky.getBoundingClientRect();
+    const xPct = (e.clientX - rect.left) / rect.width;
+    if (xPct > 0.6 && window.scrollY < REVEAL_PX) {
+      window.scrollTo({ top: REVEAL_PX + 10, behavior: reducedMotion ? "auto" : "smooth" });
+    }
   });
 
   /* ========================================================
@@ -307,12 +325,12 @@
       genre: "NARRATIVE", client: "Independent", durS: 525,
       log: "A son tries to commemorate his late mother by making a nostalgic Korean dish.",
       role: "Editor, Sound Designer",
-      outcome: "An indie short, cut for quiet beats. Awards: Audience Choice (A Place Called Sacramento '24), Best CCFS Narrative (SLO '25)." },
+      outcome: "Audience Choice (A Place Called Sacramento '24), Best CCFS Narrative (SLO '25).", outcomeLabel: "AWARDS" },
     { title: "Vicarious", ytid: "rLrl3Lh3GP8",
       genre: "NARRATIVE", client: "Independent", durS: 463,
       log: "On a very special anniversary, Clyde sits down to have a meal with the person nearest and dearest to his heart.",
       role: "Editor, Sound Designer",
-      outcome: "Winner of Santa Barbara International Film Festival's 10-10-10 Competition - 2025" },
+      outcome: "Winner of Santa Barbara International Film Festival's 10-10-10 Competition - 2025.", outcomeLabel: "AWARDS" },
     { title: "Operation Deep Freeze: A Retrospective", ytid: "YEAvHxdcYV0",
       genre: "DOC", client: "Independent", durS: 5770,
       log: "Through Ensign David Baker's lens, explore Antarctica and the ambitious history of Operation Deep Freeze.",
@@ -447,34 +465,95 @@
      ======================================================== */
   const viewer = document.getElementById("viewer");
   const viewerVideo = document.getElementById("viewerVideo");
+  const feedNav = document.getElementById("feedNav");
+  const feedPrev = document.getElementById("feedPrev");
+  const feedNext = document.getElementById("feedNext");
   let viewerOpen = false;
   let lastFocus = null;
+  let currentViewerProj = null;
 
-  function openViewer(proj) {
+  function updateFeedButtons() {
+    if (!currentViewerProj || !currentViewerProj.vert) {
+      feedNav.hidden = true;
+      return;
+    }
+    feedNav.hidden = false;
+    const idx = SHORTS.indexOf(currentViewerProj);
+    feedPrev.disabled = idx <= 0;
+    feedNext.disabled = idx >= SHORTS.length - 1;
+  }
+
+  function populateViewer(proj) {
+    currentViewerProj = proj;
     const list = proj.vert ? SHORTS : PROJECTS;
     const idx = list.indexOf(proj);
     const binName = proj.vert ? "SHORT-FORM" : "LONG-FORM";
     const trt = proj.durS ? ` · TRT ${fmtDur(proj.durS)}` : " · 9:16";
-    lastFocus = document.activeElement;
     document.getElementById("viewerSlate").textContent =
       `${binName} ${String(idx + 1).padStart(2, "0")}/${String(list.length).padStart(2, "0")} · ${proj.genre}${trt}`;
     document.getElementById("viewerTitle").textContent = proj.title;
     document.getElementById("viewerLog").textContent = proj.log;
     document.getElementById("viewerRole").textContent = proj.role;
     document.getElementById("viewerClient").textContent = proj.client || "—";
+    document.getElementById("viewerNotesLabel").textContent = proj.outcomeLabel || "NOTES";
     document.getElementById("viewerNotes").textContent = proj.outcome;
     document.getElementById("viewerYt").href = `https://www.youtube.com/watch?v=${proj.ytid}`;
     document.querySelector(".viewer-panel").classList.toggle("vert", !!proj.vert);
     viewerVideo.replaceChildren(makeEmbed(proj.ytid, proj.title, !reducedMotion));
+    updateFeedButtons();
+  }
+
+  function openViewer(proj) {
+    lastFocus = document.activeElement;
+    populateViewer(proj);
     viewer.hidden = false;
     viewerOpen = true;
     document.body.style.overflow = "hidden";
     document.getElementById("viewerClose").focus();
   }
 
+  /* --- short-form feed navigation (buttons + swipe/scroll/keys) --- */
+  function navigateViewer(direction) {
+    if (!currentViewerProj || !currentViewerProj.vert) return;
+    const idx = SHORTS.indexOf(currentViewerProj);
+    const nextIdx = idx + direction;
+    if (nextIdx < 0 || nextIdx >= SHORTS.length) return;
+    populateViewer(SHORTS[nextIdx]);
+  }
+
+  // button clicks
+  feedPrev.addEventListener("click", () => navigateViewer(-1));
+  feedNext.addEventListener("click", () => navigateViewer(1));
+
+  // scroll wheel navigation for shorts feed (fires on backdrop/panel areas, not iframe)
+  let feedScrollCooldown = false;
+  viewer.addEventListener("wheel", (e) => {
+    if (!viewerOpen || !currentViewerProj || !currentViewerProj.vert) return;
+    if (feedScrollCooldown) return;
+    const dir = e.deltaY > 0 ? 1 : -1;
+    navigateViewer(dir);
+    feedScrollCooldown = true;
+    setTimeout(() => { feedScrollCooldown = false; }, 600);
+    e.preventDefault();
+  }, { passive: false });
+
+  // touch swipe navigation for shorts feed
+  let touchStartY = 0;
+  viewer.addEventListener("touchstart", (e) => {
+    if (!viewerOpen || !currentViewerProj || !currentViewerProj.vert) return;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  viewer.addEventListener("touchend", (e) => {
+    if (!viewerOpen || !currentViewerProj || !currentViewerProj.vert) return;
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (Math.abs(dy) > 50) navigateViewer(dy > 0 ? 1 : -1);
+  }, { passive: true });
+
   function closeViewer() {
     viewer.hidden = true;
     viewerOpen = false;
+    currentViewerProj = null;
+    feedNav.hidden = true;
     viewerVideo.replaceChildren(); // stop playback
     document.body.style.overflow = "";
     if (lastFocus) lastFocus.focus();
@@ -484,6 +563,11 @@
   document.getElementById("viewerBackdrop").addEventListener("click", closeViewer);
   window.addEventListener("keydown", (e) => {
     if (viewerOpen && e.key === "Escape") closeViewer();
+    // arrow key navigation for shorts feed
+    if (viewerOpen && currentViewerProj && currentViewerProj.vert) {
+      if (e.key === "ArrowDown") { navigateViewer(1); e.preventDefault(); }
+      if (e.key === "ArrowUp") { navigateViewer(-1); e.preventDefault(); }
+    }
   });
 
   /* ========================================================
@@ -595,12 +679,13 @@
   applyGrade();
 
   /* ========================================================
-     EXPORT — project brief form (mailto compose)
+     EXPORT — project brief form (Formspree)
      ======================================================== */
   const briefForm = document.getElementById("briefForm");
   const formStatus = document.getElementById("formStatus");
+  const FORMSPREE_URL = "https://formspree.io/f/xzdlqdga";
 
-  briefForm.addEventListener("submit", (e) => {
+  briefForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.getElementById("fName");
     const email = document.getElementById("fEmail");
@@ -621,20 +706,38 @@
     const phone = document.getElementById("fPhone").value.trim();
     const type = document.getElementById("fType").value;
     const msg = document.getElementById("fMsg").value.trim();
-    const subject = `Project brief — ${name.value.trim()} (${type})`;
-    const body = [
-      `Name: ${name.value.trim()}`,
-      `Email: ${email.value.trim()}`,
-      phone ? `Phone: ${phone}` : null,
-      `Format: ${type}`,
-      "",
-      msg || "(no notes yet)"
-    ].filter(Boolean).join("\n");
 
-    window.location.href =
-      `mailto:joshgreenfield.editor@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    formStatus.textContent = "EXPORT STARTED — your mail app has the brief. Send it and you're in the queue.";
-    formStatus.classList.add("ok");
+    const submitBtn = briefForm.querySelector(".btn-export");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Exporting…";
+    formStatus.textContent = "RENDERING…";
+
+    try {
+      const resp = await fetch(FORMSPREE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: name.value.trim(),
+          email: email.value.trim(),
+          phone: phone || undefined,
+          format: type,
+          message: msg || "(no notes yet)",
+          _subject: `Project brief — ${name.value.trim()} (${type})`
+        })
+      });
+      if (resp.ok) {
+        formStatus.textContent = "EXPORT COMPLETE — your brief is in the queue. I'll be in touch.";
+        formStatus.classList.add("ok");
+        briefForm.reset();
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (err) {
+      formStatus.textContent = "RENDER FAILED — something went wrong. Try emailing joshgreenfield.editor@gmail.com directly.";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Start export ▸";
+    }
   });
 
   /* ========================================================

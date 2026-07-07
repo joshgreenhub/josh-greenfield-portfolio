@@ -32,7 +32,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Inter:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
 <!-- Vercel Speed Insights -->
 <script>
@@ -96,31 +96,30 @@
         <div class="hero-copy">
           <p class="eyebrow mono">A001 · PORTFOLIO_2026 · 23.976 FPS</p>
           <h1 class="hero-title"><span>JOSH</span><span>GREENFIELD</span></h1>
-          <p class="hero-sub">Video editor &amp; creative strategist. I make footage behave:
-          commercials, docs, and films that hold attention to the last frame.</p>
+          <p class="hero-role mono">VIDEO EDITOR & CREATIVE STRATEGIST</p>
+          <p class="hero-sub">From quiet, atmospheric narratives to fast-paced commercial campaigns. I cut video that knows exactly when to breathe, and when to move.</p>
           <div class="hero-actions">
-            <span class="skim-link mono">SCROLL TO REVEAL THE REEL ↓</span>
-            <a class="skim-link mono" href="#work" id="skimLink">SKIM THE WORK ↓</a>
+            <a class="skim-link mono" href="#work" id="skimLink">SEE MY WORK ↓</a>
           </div>
         </div>
       </div>
 
       <div class="fx-deck" id="fxDeck">
-        <button class="fx-chip mono" id="muteBtn" aria-pressed="false">🔇 UNMUTE</button>
+        <button class="fx-chip mono" id="muteBtn" aria-pressed="false"><svg class="mute-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15" class="mute-x"/><line x1="17" y1="9" x2="23" y2="15" class="mute-x"/></svg> UNMUTE</button>
       </div>
     </div>
   </section>
 
   <!-- ============ WORK ============ -->
-  <section id="work" aria-label="Selected work">
+  <section id="work" aria-label="Highlights">
     <div class="section-head">
       <p class="eyebrow mono">MEDIA POOL · 17 CLIPS</p>
-      <h2>Selected work</h2>
+      <h2>Highlights</h2>
       <p class="section-note">Click a clip to open it in the viewer.</p>
     </div>
     <div class="bin-tabs" role="tablist" aria-label="Media pool bins">
-      <button class="bin-tab mono" id="tabLong" role="tab" aria-selected="true" aria-controls="bin">▸ BIN: LONG-FORM <span class="tab-count">06</span></button>
-      <button class="bin-tab mono" id="tabShort" role="tab" aria-selected="false" aria-controls="binShort">▸ BIN: SHORT-FORM <span class="tab-count">11</span></button>
+      <button class="bin-tab mono" id="tabLong" role="tab" aria-selected="true" aria-controls="bin">▸ LONG-FORM <span class="tab-count">06</span></button>
+      <button class="bin-tab mono" id="tabShort" role="tab" aria-selected="false" aria-controls="binShort">▸ SHORT-FORM <span class="tab-count">11</span></button>
     </div>
     <div class="bin" id="bin" role="tabpanel"><!-- long-form cards injected by app.js --></div>
     <div class="bin bin-short" id="binShort" role="tabpanel" hidden><!-- short-form cards injected by app.js --></div>
@@ -177,18 +176,16 @@
         </div>
       </div>
       <div class="about-copy">
-        <h3>I'm a nice guy, really</h3>
-        <p>I've spent six-plus years cutting documentary, corporate, and narrative footage across Northern California, turning long timelines into stories that hold. My lane is post from end to end: the cut, motion graphics, sound polish, and workflows that keep multi-stakeholder projects moving without drama.</p>
-        <p>In 2026 I became a <strong>Motion-certified creative strategist</strong>, moving me upstream of the timeline. Now I help clients decide what to make before anyone even shows up on set. I craft concepts, hooks, and platform strategy that give the edit something worth cutting.</p>
-        <p>If your project has a complex message and a distracted audience, that's my
-        favorite kind of problem.</p>
+        <h3>The person behind the screen</h3>
+        <p class="bio-text">I've spent six-plus years cutting documentary, corporate, and narrative footage for brands, creators, and agencies everywhere, turning long timelines into stories that hold. You can trust me with the cut, motion graphics, sound design, and the workflows that keep multi-stakeholder projects moving.</p>
+        <p class="bio-text">In 2026 I became a <strong>Motion-certified creative strategist</strong>, enabling me upstream. I now help clients decide how to execute projects before anyone shows up to set. I will craft new angles, develop hooks, and adjust the strategy as we go, optimizing for the outcomes we set at the start.</p>
+        <p class="bio-text">Whether the edit demands a scroll stopping hook or a quiet, patient beat, I find the rhythm that serves the story.</p>
         <div class="about-tags">
           <span class="genre-tag mono">DOCUMENTARY</span>
           <span class="genre-tag mono">CORPORATE</span>
           <span class="genre-tag mono">NARRATIVE</span>
           <span class="genre-tag mono">MOTION GFX</span>
-          <span class="genre-tag mono">CINEMA-GRADE (FX6 / A7SIII)</span>
-          <span class="genre-tag mono">CREATIVE STRATEGY (CERT. '26)</span>
+          <span class="genre-tag mono">COLOR GRADING</span>
         </div>
       </div>
     </div>
@@ -198,7 +195,7 @@
   <section id="contact" aria-label="Contact">
     <div class="section-head">
       <p class="eyebrow mono">DELIVER</p>
-      <h2>Export a project with me</h2>
+      <h2>Export your project with me</h2>
     </div>
     <div class="export-panel">
       <form class="export-settings" id="briefForm" novalidate>
@@ -251,6 +248,11 @@
       <button class="viewer-close mono" id="viewerClose" aria-label="Close viewer">CLOSE ✕</button>
     </div>
     <div class="viewer-video" id="viewerVideo"></div>
+    <!-- Feed navigation for short-form clips -->
+    <div class="feed-nav" id="feedNav" hidden>
+      <button class="feed-btn feed-prev mono" id="feedPrev" aria-label="Previous clip">▲ PREV</button>
+      <button class="feed-btn feed-next mono" id="feedNext" aria-label="Next clip">▼ NEXT</button>
+    </div>
     <div class="viewer-meta">
       <div class="viewer-heading">
         <h3 id="viewerTitle"></h3>
@@ -259,7 +261,7 @@
       <div class="viewer-details">
         <div class="d-row"><span class="d-key">ROLE</span><span class="d-val" id="viewerRole"></span></div>
         <div class="d-row"><span class="d-key">CLIENT</span><span class="d-val" id="viewerClient"></span></div>
-        <div class="d-row"><span class="d-key">NOTES</span><span class="d-val" id="viewerNotes"></span></div>
+        <div class="d-row"><span class="d-key" id="viewerNotesLabel">NOTES</span><span class="d-val" id="viewerNotes"></span></div>
         <a class="d-link mono" id="viewerYt" href="#" target="_blank" rel="noopener">WATCH ON YOUTUBE ↗</a>
       </div>
     </div>
